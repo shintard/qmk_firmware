@@ -21,13 +21,13 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |--------+------+------+------+------+------| Hyper|           | Meh  |------+------+------+------+------+--------|
  * | LShift |   Z  |   X  |   C  |   V  |   B  |      |           |      |   N  |   M  |   ,  |   .  |   /  | RShift |
  * `--------+------+------+------+------+-------------'           `-------------+------+------+------+------+--------'
- *   | ~L1  | NOOP | GRAVE | LAlt |Command|                                     |Command|  \  |   [  |  ]  | ~L2  |
+ *   | ~L1  | NOOP | NOOP | LAlt |Command|                                     |Command|  \  |   [  |  ]  | ~L2  |
  *   `----------------------------------'                                       `----------------------------------'
  *                                        ,-------------.       ,-------------.
  *                                        | NOOP | NOOP |       | NOOP |  NOOP  |
  *                                 ,------|------|------|       |------+--------+------.
  *                                 |      |      | Home |       | PgUp |        |      |
- *                                 | Space|  '"  |------|       |------|   =    |Space |
+ *                                 |Space |GRAVE |------|       |------|   =    |  `"  |
  *                                 |      |      | End  |       | PgDn |        |      |
  *                                 `--------------------'       `----------------------'
  */
@@ -39,19 +39,19 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_TAB,         KC_Q,         KC_W,   KC_E,    KC_R,   KC_T,   TG(SYMB),
         KC_LCTL,        KC_A,         KC_S,   KC_D,    KC_F,   KC_G,
         KC_LSFT,        KC_Z,         KC_X,   KC_C,    KC_V,   KC_B,   ALL_T(KC_NO),
-        TT(SYMB),       KC_NO,    KC_GRAVE,   KC_LALT, KC_LGUI,
+        TT(SYMB),       KC_NO,        KC_NO,  KC_LALT, KC_LGUI,
                                               KC_NO,  KC_NO,
-                                                              KC_HOME,
-                                               KC_SPC,KC_QUOT,KC_END,
+                                                                  KC_HOME,
+                                               KC_SPC, KC_GRAVE, KC_END,
         // right hand
              KC_RGHT,     KC_6,    KC_7,       KC_8,     KC_9,   KC_0,             KC_MINS,
              TG(SYMB),    KC_Y,    KC_U,       KC_I,     KC_O,   KC_P,             KC_BSPACE,
                           KC_H,    KC_J,       KC_K,     KC_L,   KC_SCLN,          KC_ENTER,
              MEH_T(KC_NO),KC_N,    KC_M,       KC_COMM,  KC_DOT, KC_SLSH,          KC_RSFT,
-                                    KC_RGUI, KC_BSLASH,  KC_LBRC,  KC_RBRC,        TT(MDIA),
+                                   KC_RGUI,    KC_BSLASH,KC_LBRC,KC_RBRC,          TT(MDIA),
              KC_NO,        KC_NO,
              KC_PGUP,
-             KC_PGDN,KC_EQL, KC_SPC
+             KC_PGDN, KC_EQL, KC_QUOT
     ),
 /* Keymap 1: Symbol Layer
  *
@@ -148,7 +148,7 @@ void matrix_scan_user(void) {
 
   uint8_t layer = biton32(layer_state);
 
-  ergodox_board_led_off();
+  ergodox_board_led_on();
   ergodox_right_led_1_off();
   ergodox_right_led_2_off();
   ergodox_right_led_3_off();
@@ -161,7 +161,9 @@ void matrix_scan_user(void) {
       ergodox_right_led_2_on();
       break;
     default:
-      // none
+  		ergodox_right_led_1_on();
+  		ergodox_right_led_2_on();
+  		ergodox_right_led_3_on();
       break;
   }
 
